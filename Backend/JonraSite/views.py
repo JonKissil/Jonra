@@ -138,7 +138,6 @@ def logout(request):
 
 def boardCreate(request, name, boardname):
     try:
-        # a
         if request.method == "POST":
             user = User.objects.get(username=name)
             newBoard = Board()

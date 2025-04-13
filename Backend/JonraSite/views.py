@@ -135,3 +135,24 @@ def board(request, name):
 
 def logout(request):
     return HttpResponse("Logout page")
+
+def boardCreate(request, name, boardname):
+    try:
+        if request.method == "GET":
+            user = User.objects.get(username=name)
+            newBoard = Board()
+            newBoard.name = boardname
+            newBoard.save()
+            newBoard.editors.set(user)
+            boardset = Board.objects.filter(editors=user)
+            boards = [model_to_dict(board) for board in boardset]
+            data = {
+                "username": user.getUsername(),
+                "boards": serialize('json', boards),
+                "tasks": boards[0].getTasks()
+            }
+
+            return JsonResponse(data)
+    except Exception as e:
+        print(e)
+        return error(request, "Board was not created.")

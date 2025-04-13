@@ -23,6 +23,12 @@ const Home = () => {
         handleGetBoards(name);
     }, [name]);
 
+    const handleCreateBoards = async (username, boardname) => {
+            const res = await createBoards(username, boardname);
+            const boards = JSON.parse(res.data.boards);
+            setTaskBoards(boards)
+    }
+
     return (
         <div style={{ display: "flex", flexDirection: "column", height: "100vh", padding: "20px" }}>
             {/* Top Bar */}

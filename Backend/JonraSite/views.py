@@ -143,15 +143,11 @@ def boardCreate(request, name, boardname):
             newBoard = Board()
             newBoard.name = boardname
             newBoard.save()
-            newBoard.editors.set(user)
-            boardset = Board.objects.filter(editors=user)
-            boards = [model_to_dict(board) for board in boardset]
+            newBoard.editors.add(user)
             data = {
                 "username": user.getUsername(),
-                "boards": serialize('json', boards),
-                "tasks": boards[0].getTasks()
+                "board": serialize('json', [newBoard])
             }
-
             return JsonResponse(data)
     except Exception as e:
         print(e)

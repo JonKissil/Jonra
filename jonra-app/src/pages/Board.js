@@ -1,5 +1,5 @@
 const Board = props => {
-    const { name } = props;
+    const {name} = props;
     return <p>{name}</p>;
 };
 

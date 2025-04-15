@@ -26,7 +26,7 @@ const Home = () => {
     const handleCreateBoard = async () => {
         const res = await createBoards(name, prompt("What is this board's name?"));
         const board = JSON.parse(res.data.board);
-        window.location.replace("https://localhost:5000/home/" + name + "/" + board[0].pk)
+        window.location.replace("http://localhost:5000/home/" + name + "/board/" + board[0].pk)
     }
 
     return (

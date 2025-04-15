@@ -23,10 +23,10 @@ const Home = () => {
         handleGetBoards(name);
     }, [name]);
 
-    const handleCreateBoards = async (username, boardname) => {
-            const res = await createBoards(username, boardname);
-            const boards = JSON.parse(res.data.boards);
-            setTaskBoards(boards)
+    const handleCreateBoard = async () => {
+        const res = await createBoards(name, prompt("What is this board's name?"));
+        const board = JSON.parse(res.data.board);
+        window.location.replace("https://localhost:5000/home/" + name + "/" + board[0].pk)
     }
 
     return (
@@ -63,7 +63,7 @@ const Home = () => {
                 {/* Create Task Board Section */}
                 <div style={{ width: "40%", border: "1px solid #ddd", padding: "20px", borderRadius: "10px", textAlign: "center" }}>
                     <h2>Create a New Task Board</h2>
-                    <button onClick={() => alert("Create Board Clicked")}>Create Board</button>
+                    <button onClick={handleCreateBoard}>Create Board</button>
                 </div>
             </div>
         </div>

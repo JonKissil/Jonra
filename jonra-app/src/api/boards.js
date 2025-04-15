@@ -16,8 +16,11 @@ export const getBoards = async (username) => {
 }
 
 export const createBoards = async (username, boardname) => {
-    console.log(username)
-    const res = await axios.post(`http://127.0.0.1:8000/home/${username}/createboard/${boardname}`);
+
+    const res = await axios.post(`http://127.0.0.1:8000/home/${username}/createboard/${boardname}`, {
+        username: username,
+        boardname: boardname
+    });
     return res;
 }
 

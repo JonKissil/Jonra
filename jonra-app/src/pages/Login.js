@@ -1,7 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
+import "./login-page-style.css";
 
-export default function Login() {
+export default function LoginPage() {
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [activeTab, setActiveTab] = useState("login");
 
@@ -21,21 +22,17 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      <div className="bg-white w-full max-w-md p-6 rounded-xl shadow-xl">
-        <div className="flex justify-around mb-6">
+    <div className="login-container">
+      <div className="login-card">
+        <div className="login-tabs">
           <button
-            className={`px-4 py-2 font-semibold ${
-              activeTab === "login" ? "border-b-2 border-blue-500" : ""
-            }`}
+            className={`login-tab-button ${activeTab === "login" ? "active" : ""}`}
             onClick={() => setActiveTab("login")}
           >
             Login
           </button>
           <button
-            className={`px-4 py-2 font-semibold ${
-              activeTab === "signup" ? "border-b-2 border-blue-500" : ""
-            }`}
+            className={`login-tab-button ${activeTab === "signup" ? "active" : ""}`}
             onClick={() => setActiveTab("signup")}
           >
             Sign Up
@@ -48,7 +45,7 @@ export default function Login() {
               e.preventDefault();
               handleLogin();
             }}
-            className="space-y-4"
+            className="login-form"
           >
             <input
               name="username"
@@ -57,7 +54,7 @@ export default function Login() {
               value={formData.username}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border rounded"
+              className="login-input"
             />
             <input
               name="password"
@@ -66,12 +63,9 @@ export default function Login() {
               value={formData.password}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border rounded"
+              className="login-input"
             />
-            <button
-              type="submit"
-              className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-            >
+            <button type="submit" className="login-button">
               Login
             </button>
           </form>
@@ -83,7 +77,7 @@ export default function Login() {
               e.preventDefault();
               handleSignup();
             }}
-            className="space-y-4"
+            className="login-form"
           >
             <input
               name="username"
@@ -92,7 +86,7 @@ export default function Login() {
               value={formData.username}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border rounded"
+              className="login-input"
             />
             <input
               name="password"
@@ -101,12 +95,9 @@ export default function Login() {
               value={formData.password}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border rounded"
+              className="login-input"
             />
-            <button
-              type="submit"
-              className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-            >
+            <button type="submit" className="login-button">
               Sign Up
             </button>
           </form>

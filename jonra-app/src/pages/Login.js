@@ -97,7 +97,7 @@ export default function LoginPage() {
               required
               className="login-input"
             />
-            <button type="submit" className="login-button">
+            <button type="submit" className="login-button" onClick={handleLogin}>
               Sign Up
             </button>
           </form>

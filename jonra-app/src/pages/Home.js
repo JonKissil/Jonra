@@ -16,6 +16,7 @@ const Home = () => {
     const { name } = useParams();
     const [taskBoards, setTaskBoards] = useState([]);
     const [showMenu, setShowMenu] = useState(false);
+    const [boardParams, setBoardParams] = useState([])
 
     useEffect(() => {
         const handleGetBoards = async (username) => {
@@ -28,9 +29,8 @@ const Home = () => {
     }, [name]);
 
     const handleCreateBoard = async () => {
-        const boardname = prompt("What is this board's name?");
-        if (boardname.length === 0) return;
-        const res = await createBoards(name, boardname);
+        if (boardParams.length === 0) return;
+        const res = await createBoards(name, ...boardParams);
         const board = JSON.parse(res.data.board);
         window.location.replace("http://localhost:5000/home/" + name + "/board/" + board[0].pk)
     }
@@ -80,7 +80,10 @@ const Home = () => {
                 <div style={{ width: "40%", border: "1px solid #ddd", padding: "20px", borderRadius: "10px", textAlign: "center" }}>
                     <h2>Create a New Task Board</h2>
                     <form>
-                        <p>Enter board name: <input type="text" name=""></input></p>
+                        <p>Enter board name: <input id = "newBoardName" type="text" required onChange={() => {
+                            setBoardParams([document.getElementById("newBoardName").value])
+                        }}>
+                        </input></p>
                         <button onClick={handleCreateBoard}>Create Board</button>
                     </form>
                 </div>

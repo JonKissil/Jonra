@@ -35,6 +35,6 @@ urlpatterns = [
     path('home/<str:name>', views.home),
     path('home/<str:name>/board/<int:id>', views.tasks),
     path('home/<str:name>/createboard/<str:boardname>', views.boardCreate),
-    path('logout/<str:name', views.logout),
+    path('logout/<str:name>', views.logout),
     # path('error/', views.error): must have 404.html to handle 
 ]

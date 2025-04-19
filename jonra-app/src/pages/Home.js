@@ -35,13 +35,34 @@ const Home = () => {
         window.location.replace("http://localhost:5000/home/" + name + "/board/" + board[0].pk)
     }
 
+    // const handleLogout = async () => {
+    //     const res = await authLogout(name);
+    //     console.log(res);
+    //     if (res.status === 200 && res.message !== "Already logged out") {
+    //         window.location.replace(`http://localhost:5000/logout/${name}`)
+    //     };
+    // }
+
     const handleLogout = async () => {
-        const res = await authLogout(name);
-        console.log(res);
-        if (res.status === 200 && res.message !== "Already logged out") {
-            window.location.replace(`http://localhost:5000/logout/${name}`)
-        };
-    }
+        try {
+            const res = await authLogout(name);
+            console.log("Logout response:", res);
+
+            if (res.status === 200) {
+                // Clear any client-side session data
+                localStorage.removeItem("username");
+
+                // Redirect to login page
+                window.location.replace("/login");
+            } else {
+                console.warn("Logout failed");
+            }
+        } catch (err) {
+            console.error("Error during logout:", err);
+            alert("Logout failed. Please try again.");
+        }
+    };
+
 
     return (
         <div style={{ display: "flex", flexDirection: "column", height: "100vh", padding: "20px" }}>

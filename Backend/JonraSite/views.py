@@ -5,6 +5,7 @@ from django.forms.models import model_to_dict
 from django.core.serializers import serialize, deserialize
 from django.views.decorators.csrf import csrf_exempt
 from models.models import *
+#from models.models import User
 
 # NOTE: for information on Django http req-res attributes / methods
 # https://docs.djangoproject.com/en/5.1/ref/request-response/
@@ -21,39 +22,61 @@ def error(request, msg="Something went wrong..."):
     }
     return JsonResponse(res, status=404)
 
+# def signup(request):
+#     print(request)
+#     try:
+#         type = request.method
+#         if type == "GET":
+#             return JsonResponse({ 'message': 'Success' }, status=200)
+#         elif type == "POST":
+#             data = json.loads(request.body)
+#             user = data.get("user")
+#             passwd = data.get("password")
+#
+#             if not user or not passwd:
+#                 return JsonResponse({
+#                     'message': 'Missing one or more fields',
+#                     'status': 'Failed'
+#                 }, status=400)
+#
+#             userExist = User.objects.filter(username=user).count()
+#             if userExist > 0:
+#                 return JsonResponse({
+#                     'message': 'User already exists',
+#                     'status': 'Failed'
+#                 }, status=400)
+#
+#             b = User(username=user, password=passwd)
+#             b.save()
+#
+#             return JsonResponse({
+#                 'status': 'Success'
+#             }, status=201)
+#     except Exception as e:
+#         print(e)
+#         return error(request)
+
 def signup(request):
-    print(request)
+    if request.method != "POST":
+        return JsonResponse({"message": "Method not allowed"}, status=405)
+
     try:
-        type = request.method
-        if type == "GET":
-            return JsonResponse({ 'message': 'Success' }, status=200)
-        elif type == "POST":
-            data = json.loads(request.body)
-            user = data.get("user")
-            passwd = data.get("password")
+        data = json.loads(request.body.decode('utf-8'))
+        username = data.get("user", "").strip()
+        password = data.get("password", "").strip()
 
-            if not user or not passwd:
-                return JsonResponse({
-                    'message': 'Missing one or more fields',
-                    'status': 'Failed'
-                }, status=400)
-            
-            userExist = User.objects.filter(username=user).count()
-            if userExist > 0:
-                return JsonResponse({
-                    'message': 'User already exists',
-                    'status': 'Failed'
-                }, status=400)
+        if not username or not password:
+            return JsonResponse({"message": "Missing one or more fields"}, status=400)
 
-            b = User(username=user, password=passwd)
-            b.save()
+        if User.objects.filter(username=username).exists():
+            return JsonResponse({"message": "User already exists"}, status=400)
 
-            return JsonResponse({
-                'status': 'Success'
-            }, status=201)
+        new_user = User(username=username, password=password)
+        new_user.save()
+        return JsonResponse({"message": "User created successfully"}, status=201)
+
     except Exception as e:
-        print(e)
-        return error(request)
+        return JsonResponse({"message": "Invalid request"}, status=400)
 
 def home(request, name):
     try:
@@ -87,31 +110,56 @@ def home(request, name):
         print(e)
         return error(request)
 
+# def login(request):
+#     try:
+#         type = request.method
+#         if type == "GET":
+#             return error(request)
+#         elif type == "POST":
+#             data = json.loads(request.body)
+#             user = data.get("user")
+#             passwd = data.get("password")
+#
+#             if not user or not passwd:
+#                 return JsonResponse({
+#                     'message': 'Missing one or more fields',
+#                     'status': 'Failed'
+#                 }, status=400)
+#
+#             if User.objects.get(username=user, password=passwd) != User.DoesNotExist:
+#                 return JsonResponse({
+#                     'status': 'Success'
+#                 }, status=200)
+#     except:
+#         return JsonResponse({
+#             'message': 'User does not exist!',
+#             'status': 'Failure'
+#         }, status=400)
+
 def login(request):
+    if request.method != "POST":
+        return JsonResponse({"message": "Method not allowed"}, status=405)
+
     try:
-        type = request.method
-        if type == "GET":
-            return error(request)
-        elif type == "POST":
-            data = json.loads(request.body)
-            user = data.get("user")
-            passwd = data.get("password")
+        data = json.loads(request.body.decode('utf-8'))
+        username = data.get("user", "").strip()
+        password = data.get("password", "").strip()
 
-            if not user or not passwd:
-                return JsonResponse({
-                    'message': 'Missing one or more fields',
-                    'status': 'Failed'
-                }, status=400)
+        if not username or not password:
+            return JsonResponse({"message": "Missing credentials"}, status=400)
 
-            if User.objects.get(username=user, password=passwd) != User.DoesNotExist:
-                return JsonResponse({
-                    'status': 'Success'
-                }, status=200)
-    except:
-        return JsonResponse({
-            'message': 'User does not exist!',
-            'status': 'Failure'
-        }, status=400)
+        try:
+            user = User.objects.get(username=username)
+            if user.password == password:
+                return JsonResponse({"message": "Login successful"}, status=200)
+            else:
+                return JsonResponse({"message": "Invalid password"}, status=401)
+
+        except User.DoesNotExist:
+            return JsonResponse({"message": "User does not exist"}, status=401)
+
+    except Exception as e:
+        return JsonResponse({"message": "Invalid request"}, status=400)
 
 def board(request, name):
     try:
@@ -134,8 +182,11 @@ def board(request, name):
         print(e)
         return error(request, "Board does not exist.")
 
-def logout(request):
-    return HttpResponse("Logout page")
+# def logout(request):
+#     return HttpResponse("Logout page")
+
+def logout(request, name):  # <-- accept `name`
+    return JsonResponse({"message": f"User {name} logged out successfully"}, status=200)
 
 def boardCreate(request, name, boardname):
     try:

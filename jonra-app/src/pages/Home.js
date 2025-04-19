@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { authLogout } from "../api/auth";
 
@@ -16,8 +16,16 @@ const Home = () => {
     const { name } = useParams();
     const [taskBoards, setTaskBoards] = useState([]);
     const [showMenu, setShowMenu] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
+        const storedUsername = localStorage.getItem("username");
+
+        if (!storedUsername || storedUsername !== name) {
+            navigate("/login");
+            return;
+        }
+
         const handleGetBoards = async (username) => {
             const res = await getBoards(username);
             const boards = JSON.parse(res.data.boards);

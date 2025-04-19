@@ -17,6 +17,7 @@ export default function LoginPage() {
     try {
       const res = await authLogin(formData);
       setMessage("Login successful!");
+      localStorage.setItem("username", formData.username);
       window.location.href = `/home/${formData.username}`;
     } catch (err) {
       console.error(err);

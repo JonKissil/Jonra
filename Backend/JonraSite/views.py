@@ -152,7 +152,21 @@ def boardCreate(request, name, boardname):
             return JsonResponse(data)
     except Exception as e:
         print(e)
-        return error(request, "Board was not created.")    
+        return error(request, "Board was not created.")
+
+def boardDelete(request, name, id):
+    try:
+        if request.method == "DELETE":
+            user = User.objects.get(username=name)
+            board = user.getBoards().get(id=id)
+            board.delete()
+    except Exception as e:
+        print(e)
+        return error(request, "An issue has occurred.")
+    return JsonResponse({
+        'message': "Board deleted successfully",
+        'status': 'Success'
+    }, status=201)
 
 def tasks(request, name, id):
     print(request)

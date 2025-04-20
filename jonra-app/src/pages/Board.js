@@ -33,38 +33,76 @@ const Board = () => {
     }, [])
 
     return (
-        <div>
-            <h1 style={{textAlign: "center"}}>Tasks</h1>
-                <h2>Create new Task:</h2>
-                <div>
-                    <p><label>Name: <input id="taskName" type="text" required onChange={() => {
-                        setTaskParams([document.getElementById("taskName").value, taskParams[1], taskParams[2], taskParams[3]]);
-                    }}/></label></p>
-                    <p><label>Description: <input id="taskDesc" type="text" placeholder="None" onChange={() => {
-                        setTaskParams([taskParams[0], document.getElementById("taskDesc").value, taskParams[2], taskParams[3]]);
-                    }}/></label></p>
-                    <p><label>Priority: <input id="taskPriority" type="text" placeholder="M" onChange={() => {
-                        setTaskParams([taskParams[0], taskParams[1], document.getElementById("taskDesc").value, taskParams[3]]);
-                    }}/></label></p>
-                    <p><label>Status: <input id="taskStatus" type="text" placeholder="NS" onChange={() => {
-                        setTaskParams([taskParams[0], taskParams[1], taskParams[2], document.getElementById("taskDesc").value]);
-                    }}/></label></p>
-                    <button onClick={handleAddTasks}>Create Task</button>
+        <div className="board-container">
+            <h1 className="board-title">Tasks</h1>
+
+            <div className="task-form">
+                <h2>Create new Task</h2>
+                <div className="form-group">
+                    <label>Name:</label>
+                    <input
+                        id="taskName"
+                        type="text"
+                        required
+                        onChange={() => {
+                            setTaskParams([document.getElementById("taskName").value, taskParams[1], taskParams[2], taskParams[3]]);
+                        }}
+                    />
                 </div>
-                {tasks.length? tasks.map((task) => (
+                <div className="form-group">
+                    <label>Description:</label>
+                    <input
+                        id="taskDesc"
+                        type="text"
+                        placeholder="None"
+                        onChange={() => {
+                            setTaskParams([taskParams[0], document.getElementById("taskDesc").value, taskParams[2], taskParams[3]]);
+                        }}
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Priority:</label>
+                    <input
+                        id="taskPriority"
+                        type="text"
+                        placeholder="M"
+                        onChange={() => {
+                            setTaskParams([taskParams[0], taskParams[1], document.getElementById("taskPriority").value, taskParams[3]]);
+                        }}
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Status:</label>
+                    <input
+                        id="taskStatus"
+                        type="text"
+                        placeholder="NS"
+                        onChange={() => {
+                            setTaskParams([taskParams[0], taskParams[1], taskParams[2], document.getElementById("taskStatus").value]);
+                        }}
+                    />
+                </div>
+                <button className="btn btn-primary" onClick={handleAddTasks}>Create Task</button>
+            </div>
+
+            <div className="tasks-list">
+                {tasks.length ? tasks.map((task) => (
                     <Task
+                        key={task.fields.name}
                         taskName={task.fields.name}
                         boardId={id}
                         description={task.fields.description}
                         priority={task.fields.priority}
                         status={task.fields.status}
                     >
-                        <div className="taskButtonContainer">
-                            <button className="taskButton" onClick={() => handleRemove(task.fields.name)}>Remove task</button>
+                        <div className="task-actions">
+                            <button className="btn btn-danger" onClick={() => handleRemove(task.fields.name)}>Remove task</button>
                         </div>
                     </Task>
-                )): <p style={{textAlign: "center"}}>No tasks.</p>}
-            <Link to={`/home/${name}`}><p style={{textAlign: "center"}}>Home</p></Link>
+                )) : <p className="no-tasks">No tasks.</p>}
+            </div>
+
+            <Link to={`/home/${name}`} className="back-link">← Back to Home</Link>
         </div>
     );
 };

@@ -29,9 +29,9 @@ export const editBoard = async (username, boardname) => {
 }
 
 export const deleteBoards = async (username, boardId) => {
-    const res = await axios.delete(`http://127.0.0.1:8000/home/${username}/deleteboard/${id}`, {
+    const res = await axios.delete(`http://127.0.0.1:8000/home/${username}/deleteboard/${boardId}`, {
         username: username,
-        id: boardId
+        boardId: boardId
     });
     return res;
 }

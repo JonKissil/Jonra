@@ -1,23 +1,98 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useFetcher, useParams } from "react-router-dom";
+import { editTask, getTaskFromId } from "../api/tasks";
 import "./task-style.css";
+import "./login-page-style.css"
 
 // props are: name, description, priority, status
 
 export const Task = props => {
     const { name } = useParams();
-    const { boardId, taskName, description, priority, status } = props;
+    const { boardId, taskId, taskName, description, priority, status, handleGetTasks } = props;
+    const [ editName, setEditName ] = useState(taskName);
+    const [ editDesc, setEditDesc ] = useState(description);
+    const [ editPriority, setEditPriority ] = useState(priority);
+    const [ editStatus, setEditStatus ] = useState(status);
+    const [ edit, setEdit ] = useState(false);
+    const [ attributes, setAttributes ] = useState([taskName, description, priority, status]);
+
+    const getTaskInfo = async () => {
+        const res = await getTaskFromId(name, boardId, taskId);
+        setAttributes([res.fields.name, res.fields.description, res.fields.priority, res.fields.status]);
+    }
+
+    const handleEdit = async () => {
+        const res = await editTask(name, boardId, taskId, editName, editDesc, editPriority, editStatus);
+        setEdit(false);
+        getTaskInfo();
+    }
+
+    useEffect(() => {
+        handleGetTasks();
+    }, [attributes])
 
     return (
-        <div className="task-card">
-            <h2 className="task-title">{taskName}</h2>
-            <div className="task-divider"></div>
-            <div className="task-details">
-                <p><strong>Description:</strong> {description ? description : "None"}</p>
-                <p><strong>Priority:</strong> {priority}</p>
-                <p><strong>Status:</strong> {status}</p>
-            </div>
-            {props.children}
+        <div className="taskContainer">
+            {!edit &&
+                <div>
+                    <h2 className="taskTitle">{taskName}</h2>
+                    <hr />
+                    <p>Description: {description}</p>
+                    <p>Priority: {priority}</p>
+                    <p>Status: {status}</p>
+                    <button id="edit" className="login-button" onClick={() => setEdit(true)}>Edit</button>
+                    {props.children}
+                </div>
+            }
+            {edit &&
+                <div>
+                    <h2 className="taskTitle">
+                    <input
+                        id="taskHeaderTitle"
+                        className="login-input"
+                        type="text"
+                        placeholder={taskName}
+                        maxLength={250}
+                        onChange={() => setEditName(document.getElementById("taskHeaderTitle").value)}
+                        required
+                    />
+                </h2>
+
+                <hr />
+
+                <p>
+                    <input
+                        id="taskPdesc"
+                        className="login-input"
+                        type="text"
+                        placeholder={description}
+                        onChange={() => setEditDesc(document.getElementById("taskPdesc").value)}
+                        maxLength={2500}
+                    />
+                </p>
+
+                <p>
+                    <input
+                        id="taskPpriority"
+                        className="login-input"
+                        type="text"
+                        placeholder={priority}
+                        onChange={() => setEditPriority(document.getElementById("taskPpriority").value)}
+                    />
+                </p>
+
+                <p>
+                    <input
+                        id="taskPstatus"
+                        className="login-input"
+                        type="text"
+                        placeholder={status}
+                        onChange={() => setEditStatus(document.getElementById("taskPstatus").value)}
+                    />
+                </p>
+                <button id="save" className="login-button" onClick={handleEdit}>Save</button>
+                </div>
+            }
         </div>
     );
 }

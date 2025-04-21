@@ -71,14 +71,10 @@ const App = () => {
         <Route index element={<Login/>}/>
         <Route path="login" element={<Login/>}/>
         <Route path="signup" element={<Signup/>}/>
-        <Route path="home/:name/" element={
-          <AppLayout username={useParams().name}>
-            <Home />
-          </AppLayout>
-        }>
-          <Route index element={<Home />}/>
-          <Route path="board/:id" element={<Board />}/>
-          <Route path="*" element={<PageNotFound />} />
+        <Route path="home/:name/">
+            <Route index element={<Home />}/>
+            <Route path="board/:id" element={<Board />}/>
+            <Route path="*" element={<PageNotFound />} />
         </Route>
         <Route path="logout/:name" element={<Logout />} />
         <Route path="*" element={<PageNotFound />} />

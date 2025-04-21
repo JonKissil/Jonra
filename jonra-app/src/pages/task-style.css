@@ -1,13 +1,35 @@
+body {
+  width: 100%;
+}
+
+.taskPgcontainer {
+  max-width: 1000px;
+  margin-left: auto;
+  /* margin-right: auto; */
+}
+
 .taskContainer {
-    border: 3px solid black;
-    border-radius: 5px;
-    width: 90%;
-    margin-left: auto;
-    margin-right: auto;
+    border: 3px solid lightgray;
+    border-radius: 10px;
     margin-bottom: 10px;
     box-shadow: 4px 4px 10px gray;
     padding: 10px;
-    max-width: 500px;
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    text-wrap: wrap;
+    background-color: white;
+}
+
+.login-card {
+    /* width: 80%; */
+    margin: 0;
+    box-shadow: 4px 4px 10px gray;
+    padding: 10px;
+    max-width: 300px;
+    max-height: 350px;
+    width: 100%;
+    text-wrap: wrap;
 }
 
 .taskContainer:hover {
@@ -22,7 +44,7 @@
 .taskButtonContainer {
   width: 100%;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 
 .taskButton {
@@ -38,4 +60,71 @@
 .taskButton:active {
   opacity: 0.65;
   transition: opacity 0.2s;
+}
+
+#edit {
+  background-color: #3b82f6;
+}
+
+#save {
+  background-color: green;
+}
+
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.profile-section {
+    position: relative;
+}
+
+.profile-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.profile-icon:hover {
+    background-color: #f1f5f9;
+}
+
+.profile-dropdown {
+    position: absolute;
+    right: 0;
+    top: 50px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    padding: 0.75rem 0;
+    z-index: 20;
+}
+
+.centered-form-container {
+    display: flex;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.login-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
 }
